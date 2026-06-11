@@ -79,8 +79,9 @@ async function refresh(): Promise<void> {
       return
     }
     setScreen('data')
-    // logout only makes sense for a real authed session
-    logoutBtn.hidden = status !== 'authed'
+    // show the button for authed (log out) and mock (exit demo)
+    logoutBtn.hidden = status !== 'authed' && status !== 'mock'
+    logoutBtn.title = status === 'mock' ? 'Exit demo' : 'Log out'
     try {
       const stats: Stats = await window.health.getStats()
       renderCards(cards, stats)
@@ -103,13 +104,15 @@ async function refresh(): Promise<void> {
 }
 
 connect.addEventListener('click', async () => {
-  connect.disabled = true
+  // re-clicking restarts the flow (the main process cancels the prior attempt)
+  connect.textContent = 'Waiting for browser… (click to retry)'
   try {
     await window.health.login()
-  } finally {
-    connect.disabled = false
+    await refresh()
+  } catch (err) {
+    console.error(err) // timeout / closed window / denied
   }
-  await refresh()
+  if (!auth.hidden) connect.textContent = 'Connect Google Health'
 })
 
 refreshBtn.addEventListener('click', refresh)
@@ -135,8 +138,13 @@ useDemoBtn.addEventListener('click', async () => {
 })
 
 logoutBtn.addEventListener('click', async () => {
-  await window.health.logout()
-  await refresh() // -> unauthed -> shows Connect panel
+  // in demo mode this exits demo (-> setup); otherwise it logs out (-> connect)
+  if ((await window.health.status()) === 'mock') {
+    await window.health.exitDemo()
+  } else {
+    await window.health.logout()
+  }
+  await refresh()
 })
 
 // Paint cached stats immediately so launch isn't a blank widget.

@@ -10,6 +10,7 @@ const CH = {
   logout: 'health:logout',
   saveCreds: 'setup:saveCreds',
   useDemo: 'setup:useDemo',
+  exitDemo: 'setup:exitDemo',
   openUrl: 'shell:openUrl'
 } as const
 
@@ -21,6 +22,7 @@ const api = {
   logout: (): Promise<void> => ipcRenderer.invoke(CH.logout),
   saveCreds: (text: string): Promise<boolean> => ipcRenderer.invoke(CH.saveCreds, text),
   useDemo: (): Promise<boolean> => ipcRenderer.invoke(CH.useDemo),
+  exitDemo: (): Promise<boolean> => ipcRenderer.invoke(CH.exitDemo),
   openUrl: (url: string): Promise<void> => ipcRenderer.invoke(CH.openUrl, url)
 }
 

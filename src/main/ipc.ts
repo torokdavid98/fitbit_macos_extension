@@ -13,6 +13,7 @@ export const CH = {
   logout: 'health:logout',
   saveCreds: 'setup:saveCreds',
   useDemo: 'setup:useDemo',
+  exitDemo: 'setup:exitDemo',
   openUrl: 'shell:openUrl'
 } as const
 
@@ -39,6 +40,12 @@ export function registerIpc(): void {
 
   ipcMain.handle(CH.useDemo, () => {
     setSetting('demo', true)
+    resetProvider()
+    return true
+  })
+
+  ipcMain.handle(CH.exitDemo, () => {
+    setSetting('demo', false)
     resetProvider()
     return true
   })

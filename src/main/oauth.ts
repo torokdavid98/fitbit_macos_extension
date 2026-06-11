@@ -34,9 +34,21 @@ function pkcePair() {
 
 // Interactive login: spin a loopback server, open the consent page, capture the
 // auth code on redirect, exchange it (with PKCE verifier) for tokens.
+
+// Only one auth flow at a time; re-invoking cancels the previous one so a stale
+// loopback server never blocks a retry.
+let activeServer: ReturnType<typeof createServer> | null = null
+const AUTH_TIMEOUT_MS = 3 * 60 * 1000
+
 export async function runAuthFlow(): Promise<TokenSet> {
   if (!clientId()) throw new Error('GOOGLE_OAUTH_CLIENT_ID not set')
   const { verifier, challenge } = pkcePair()
+
+  // Tear down any pending flow from a prior click.
+  if (activeServer) {
+    activeServer.close()
+    activeServer = null
+  }
 
   let redirectUri = ''
   const code = await new Promise<string>((resolve, reject) => {
@@ -46,11 +58,24 @@ export async function runAuthFlow(): Promise<TokenSet> {
       const err = url.searchParams.get('error')
       res.writeHead(200, { 'Content-Type': 'text/html' })
       res.end('<html><body>You can close this window and return to Mood Widget.</body></html>')
-      server.close()
+      cleanup()
       if (err) reject(new Error(`OAuth error: ${err}`))
       else if (authCode) resolve(authCode)
       else reject(new Error('No authorization code returned'))
     })
+    activeServer = server
+
+    // Don't hang forever if the user never finishes in the browser.
+    const timer = setTimeout(() => {
+      cleanup()
+      reject(new Error('Authorization timed out'))
+    }, AUTH_TIMEOUT_MS)
+
+    function cleanup(): void {
+      clearTimeout(timer)
+      server.close()
+      if (activeServer === server) activeServer = null
+    }
 
     server.listen(0, '127.0.0.1', () => {
       const { port } = server.address() as { port: number }
@@ -68,7 +93,10 @@ export async function runAuthFlow(): Promise<TokenSet> {
       shell.openExternal(`${AUTH_URL}?${params.toString()}`)
     })
 
-    server.on('error', reject)
+    server.on('error', (e) => {
+      cleanup()
+      reject(e)
+    })
   })
 
   return exchange({
