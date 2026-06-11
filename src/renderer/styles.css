@@ -153,9 +153,15 @@ body {
   background: var(--card-bg-hover);
 }
 
-.icon-btn.spin {
+.icon-btn svg {
+  width: 14px;
+  height: 14px;
+  transform-origin: center;
+}
+
+/* spin only the icon, not the whole button */
+.icon-btn svg.spin {
   animation: spin 0.7s linear infinite;
-  pointer-events: none;
 }
 
 @keyframes spin {

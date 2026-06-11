@@ -19,6 +19,7 @@ const auth = document.getElementById('auth')!
 const setup = document.getElementById('setup')!
 const connect = document.getElementById('connect') as HTMLButtonElement
 const refreshBtn = document.getElementById('refresh') as HTMLButtonElement
+const refreshIc = document.getElementById('refresh-ic')!
 const logoutBtn = document.getElementById('logout') as HTMLButtonElement
 const statusEl = document.getElementById('status')!
 const statusLabel = document.getElementById('status-label')!
@@ -62,7 +63,7 @@ let refreshing = false
 async function refresh(): Promise<void> {
   if (refreshing) return
   refreshing = true
-  refreshBtn.classList.add('spin')
+  refreshIc.classList.add('spin')
   try {
     const status = await window.health.status()
     if (status === 'unconfigured') {
@@ -97,7 +98,7 @@ async function refresh(): Promise<void> {
     }
   } finally {
     refreshing = false
-    refreshBtn.classList.remove('spin')
+    refreshIc.classList.remove('spin')
   }
 }
 
