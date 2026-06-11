@@ -40,7 +40,7 @@ of scope here.
 ## 1. Clone & install
 
 ```bash
-git clone <your-fork-url> fitbit_macos_extension
+git clone https://github.com/torokdavid98/fitbit_macos_extension.git
 cd fitbit_macos_extension
 npm install
 ```
