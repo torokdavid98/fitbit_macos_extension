@@ -25,6 +25,11 @@
       "category": "public.app-category.healthcare-fitness",
       "target": "dmg"
     },
-    "files": ["out/**/*"]
+    "files": [
+      "out/**/*"
+    ]
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }

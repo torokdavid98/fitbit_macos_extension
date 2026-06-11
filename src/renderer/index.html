@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Widget</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <header class="head">
+        <div class="head-left">
+          <span class="title">Today</span>
+          <span class="updated" id="updated">—</span>
+        </div>
+        <div class="head-right">
+          <span class="status" id="status" title="Connection status">
+            <i class="dot"></i><span id="status-label">…</span>
+          </span>
+          <button id="refresh" class="icon-btn" title="Refresh" aria-label="Refresh">⟳</button>
+          <button id="logout" class="icon-btn" title="Log out" aria-label="Log out" hidden>⏻</button>
+        </div>
+      </header>
+
+      <section class="grid" id="cards"></section>
+
+      <!-- intraday heart-rate sparkline -->
+      <section class="chart" id="chart"></section>
+
+      <!-- sleep stage hypnogram -->
+      <section class="chart" id="sleep-chart"></section>
+
+      <!-- Reserved for the deferred mood phase. -->
+      <section class="mood-slot" id="mood-slot"></section>
+
+      <div class="auth" id="auth" hidden>
+        <span class="auth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1.5 2 4 2-6 1.5 3.5h5.27"/></svg></span>
+        <p>Connect your Google Health account to see your stats.</p>
+        <button id="connect">Connect Google Health</button>
+      </div>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
