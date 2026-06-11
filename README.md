@@ -158,19 +158,3 @@ Swapping data sources is a single flag: `USE_MOCK` in `src/shared/config.ts`. Th
 sees the `Stats` shape, so the UI never changes between mock and real.
 
 ---
-
-## Known limitations / TODO
-
-- **Endpoint shapes are best-effort.** The request/response mapping in `googleHealth.ts` follows the
-  docs but hasn't been validated against a live account for every metric — expect to tweak
-  `latestSample` / `dailyValue` / `sleepTotal`. Confirm exact **read** scope strings at setup time.
-- **Air metric coverage** — Fitbit Air is new; verify which metrics actually surface via the Google
-  Health API for a personal account.
-- **Testing-mode 7-day re-login** — inherent to unverified restricted scopes.
-- **Mood tracking** — UI slot reserved (`#mood-slot`); entry flow not built yet.
-
----
-
-## License
-
-MIT (add a `LICENSE` file to your fork).
