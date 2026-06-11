@@ -5,9 +5,7 @@ stats at a glance — latest heart rate, resting HR, steps, active calories, HRV
 live connection-status indicator and a manual refresh button. Built with Electron + TypeScript. Mood
 tracking is planned (a slot is reserved in the UI).
 
-> **Heads-up:** Fitbit Air is screenless and syncs to the **Google Health app**, not the classic
-> Fitbit app. So this widget reads from the **Google Health API** (the next-generation Fitbit Web
-> API), *not* the legacy Fitbit Web API or Google Fit (which is shut down).
+<img width="387" height="809" alt="Screenshot 2026-06-11 at 14 23 19" src="https://github.com/user-attachments/assets/df628b53-6070-46e6-ae16-31ac92ae27b4" />
 
 ---
 
