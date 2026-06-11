@@ -16,13 +16,28 @@ const chart = document.getElementById('chart')!
 const sleepChart = document.getElementById('sleep-chart')!
 const updated = document.getElementById('updated')!
 const auth = document.getElementById('auth')!
+const setup = document.getElementById('setup')!
 const connect = document.getElementById('connect') as HTMLButtonElement
 const refreshBtn = document.getElementById('refresh') as HTMLButtonElement
 const logoutBtn = document.getElementById('logout') as HTMLButtonElement
 const statusEl = document.getElementById('status')!
 const statusLabel = document.getElementById('status-label')!
+const credsJson = document.getElementById('creds-json') as HTMLTextAreaElement
+const saveCredsBtn = document.getElementById('save-creds') as HTMLButtonElement
+const useDemoBtn = document.getElementById('use-demo') as HTMLButtonElement
+const openConsoleBtn = document.getElementById('open-console') as HTMLButtonElement
+const setupErr = document.getElementById('setup-err')!
 
 type Conn = 'connected' | 'offline' | 'error' | 'mock'
+type Screen = 'data' | 'auth' | 'setup'
+
+const dataEls = [cards, chart, sleepChart, updated]
+
+function setScreen(screen: Screen): void {
+  setup.hidden = screen !== 'setup'
+  auth.hidden = screen !== 'auth'
+  for (const el of dataEls) (el as HTMLElement).style.display = screen === 'data' ? '' : 'none'
+}
 
 function setConnection(state: Conn): void {
   statusEl.className = `status ${state}`
@@ -42,14 +57,6 @@ function relativeTime(ts: number): string {
   return `${Math.round(mins / 60)}h ago`
 }
 
-function showAuth(needed: boolean): void {
-  auth.hidden = !needed
-  cards.style.display = needed ? 'none' : ''
-  chart.style.display = needed ? 'none' : ''
-  sleepChart.style.display = needed ? 'none' : ''
-  updated.style.display = needed ? 'none' : ''
-}
-
 let refreshing = false
 
 async function refresh(): Promise<void> {
@@ -58,13 +65,19 @@ async function refresh(): Promise<void> {
   refreshBtn.classList.add('spin')
   try {
     const status = await window.health.status()
-    if (status === 'unauthed') {
-      showAuth(true)
+    if (status === 'unconfigured') {
+      setScreen('setup')
       setConnection('offline')
       logoutBtn.hidden = true
       return
     }
-    showAuth(false)
+    if (status === 'unauthed') {
+      setScreen('auth')
+      setConnection('offline')
+      logoutBtn.hidden = true
+      return
+    }
+    setScreen('data')
     // logout only makes sense for a real authed session
     logoutBtn.hidden = status !== 'authed'
     try {
@@ -80,7 +93,7 @@ async function refresh(): Promise<void> {
       updated.textContent = 'sync failed'
       console.error(err)
       // a failed refresh may have cleared tokens -> re-check auth
-      if ((await window.health.status()) === 'unauthed') showAuth(true)
+      if ((await window.health.status()) === 'unauthed') setScreen('auth')
     }
   } finally {
     refreshing = false
@@ -99,6 +112,26 @@ connect.addEventListener('click', async () => {
 })
 
 refreshBtn.addEventListener('click', refresh)
+
+openConsoleBtn.addEventListener('click', () =>
+  window.health.openUrl('https://console.cloud.google.com/')
+)
+
+saveCredsBtn.addEventListener('click', async () => {
+  setupErr.hidden = true
+  const ok = await window.health.saveCreds(credsJson.value.trim())
+  if (!ok) {
+    setupErr.hidden = false
+    return
+  }
+  credsJson.value = ''
+  await refresh() // -> unauthed -> Connect screen
+})
+
+useDemoBtn.addEventListener('click', async () => {
+  await window.health.useDemo()
+  await refresh()
+})
 
 logoutBtn.addEventListener('click', async () => {
   await window.health.logout()

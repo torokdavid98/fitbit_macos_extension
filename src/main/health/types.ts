@@ -33,7 +33,7 @@ export type NumericStatKey = Exclude<
   'updatedAt' | 'heartRateSeries' | 'sources' | 'sleepStages'
 >
 
-export type AuthStatus = 'authed' | 'unauthed' | 'mock'
+export type AuthStatus = 'authed' | 'unauthed' | 'mock' | 'unconfigured'
 
 export interface HealthProvider {
   /** Latest stats. Throws if not authed (except mock, which never is). */

@@ -1,5 +1,5 @@
 import { GOOGLE_HEALTH_API_BASE } from '../../shared/config'
-import { refreshTokens, runAuthFlow, type TokenSet } from '../oauth'
+import { hasClientId, refreshTokens, runAuthFlow, type TokenSet } from '../oauth'
 import { clearTokens, loadTokens, saveTokens } from '../tokenStore'
 import type { AuthStatus, HealthProvider, NumericStatKey, SleepStage, Stats } from './types'
 
@@ -60,6 +60,7 @@ export class GoogleHealthProvider implements HealthProvider {
   private tokens: TokenSet | null = loadTokens()
 
   async status(): Promise<AuthStatus> {
+    if (!hasClientId()) return 'unconfigured'
     return this.tokens ? 'authed' : 'unauthed'
   }
 

@@ -2,6 +2,7 @@ import { createHash, randomBytes } from 'crypto'
 import { createServer } from 'http'
 import { shell } from 'electron'
 import { GOOGLE_HEALTH_SCOPES } from '../shared/config'
+import { resolveClientId, resolveClientSecret } from './credStore'
 
 // Google OAuth2 endpoints.
 const AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -9,10 +10,12 @@ const TOKEN_URL = 'https://oauth2.googleapis.com/token'
 
 // Desktop ("installed") OAuth client. PKCE is used regardless; Google's token
 // endpoint for installed clients still accepts the (non-confidential) client
-// secret, so we send it when present. Both come from .env (gitignored).
-// Read lazily — .env is loaded at app startup, after this module is imported.
-const clientId = () => process.env['GOOGLE_OAUTH_CLIENT_ID'] ?? ''
-const clientSecret = () => process.env['GOOGLE_OAUTH_CLIENT_SECRET'] ?? ''
+// secret, so we send it when present. Creds come from the in-app store first,
+// then env vars (see credStore). Read lazily so in-app setup takes effect.
+const clientId = () => resolveClientId()
+const clientSecret = () => resolveClientSecret()
+
+export const hasClientId = (): boolean => Boolean(resolveClientId())
 
 export interface TokenSet {
   accessToken: string

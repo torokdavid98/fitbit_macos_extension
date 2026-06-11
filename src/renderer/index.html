@@ -33,6 +33,29 @@
       <!-- Reserved for the deferred mood phase. -->
       <section class="mood-slot" id="mood-slot"></section>
 
+      <div class="setup" id="setup" hidden>
+        <h2 class="setup-title">Connect your data</h2>
+        <ol class="setup-steps">
+          <li>
+            <button id="open-console" class="link-btn">Open Google Cloud Console</button>,
+            create a project, enable the <b>Google Health API</b>.
+          </li>
+          <li>On <b>Data Access</b>, add the 3 <code>.readonly</code> health scopes.</li>
+          <li>On the <b>OAuth consent screen</b>, add your Google account as a <b>test user</b>.</li>
+          <li>Create an <b>OAuth client ID → Desktop app</b> and download its JSON.</li>
+          <li>Paste the JSON below.</li>
+        </ol>
+        <textarea
+          id="creds-json"
+          class="setup-input"
+          placeholder='{ "installed": { "client_id": "...", "client_secret": "..." } }'
+          spellcheck="false"
+        ></textarea>
+        <p class="setup-err" id="setup-err" hidden>Couldn't read that — paste the full client JSON.</p>
+        <button id="save-creds" class="primary-btn">Save &amp; continue</button>
+        <button id="use-demo" class="link-btn">Skip — use demo data</button>
+      </div>
+
       <div class="auth" id="auth" hidden>
         <span class="auth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1.5 2 4 2-6 1.5 3.5h5.27"/></svg></span>
         <p>Connect your Google Health account to see your stats.</p>
