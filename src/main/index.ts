@@ -81,7 +81,7 @@ function createTray(): void {
   // adapts to light/dark menubar. Replace with a real icon asset later.
   tray = new Tray(nativeImage.createEmpty())
   tray.setTitle('❤︎')
-  tray.setToolTip('Mood Widget')
+  tray.setToolTip('Fitbit macOS Extension')
   // left click toggles the widget; right click opens the menu
   tray.on('click', toggleWidget)
   tray.on('right-click', () => tray?.popUpContextMenu(buildTrayMenu()))

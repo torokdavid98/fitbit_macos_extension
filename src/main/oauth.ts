@@ -57,7 +57,7 @@ export async function runAuthFlow(): Promise<TokenSet> {
       const authCode = url.searchParams.get('code')
       const err = url.searchParams.get('error')
       res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end('<html><body>You can close this window and return to Mood Widget.</body></html>')
+      res.end('<html><body>You can close this window and return to Fitbit macOS Extension.</body></html>')
       cleanup()
       if (err) reject(new Error(`OAuth error: ${err}`))
       else if (authCode) resolve(authCode)

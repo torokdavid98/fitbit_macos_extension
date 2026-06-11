@@ -328,11 +328,6 @@ body {
   display: inline-block;
 }
 
-.mood-slot {
-  /* deferred mood phase drops in here */
-  min-height: 0;
-}
-
 .auth {
   display: flex;
   flex-direction: column;

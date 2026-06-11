@@ -1,9 +1,8 @@
-# Mood Widget
+# Fitbit Air macOS Extension
 
 A small macOS menubar widget that shows your **Fitbit Air** (or any Fitbit / Pixel Watch) health
 stats at a glance — latest heart rate, resting HR, steps, active calories, HRV, and SpO₂. Includes a
-live connection-status indicator and a manual refresh button. Built with Electron + TypeScript. Mood
-tracking is planned (a slot is reserved in the UI).
+live connection-status indicator and a manual refresh button. Built with Electron + TypeScript.
 
 <img width="387" height="809" alt="Screenshot 2026-06-11 at 14 23 19" src="https://github.com/user-attachments/assets/df628b53-6070-46e6-ae16-31ac92ae27b4" />
 
@@ -41,8 +40,8 @@ of scope here.
 ## 1. Clone & install
 
 ```bash
-git clone <your-fork-url> mood-widget
-cd mood-widget
+git clone <your-fork-url> fitbit_macos_extension
+cd fitbit_macos_extension
 npm install
 ```
 
